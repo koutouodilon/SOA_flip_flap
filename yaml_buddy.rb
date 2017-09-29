@@ -3,18 +3,7 @@ module YamlBuddy
   # take_yaml: converts a String with YAML data into @data
   # parameter: yaml - a String in YAML format
   def take_yaml(yaml)
-    @data = []
-    yaml_source = YAML.safe_load(yaml)
-    yaml_source.each do |line|
-      @data.push(hash_yaml_line(line))
-    end
-    @data
-  end
-
-  def hash_yaml_line(line)
-    row = {}
-    line.each_with_index { |(key, value), _| row[key] = value }
-    row
+    @data = YAML.safe_load(yaml)
   end
 
   # to_yaml: converts @data into yaml string
