@@ -1,8 +1,11 @@
 require_relative 'tsv_buddy'
 require_relative 'yaml_buddy'
+require 'yaml'
 
 # Converts tabular data between storage formats
 class FlipFlap
+  include TsvBuddy
+  include YamlBuddy
   # Do NOT create an initialize method
 
   attr_reader :data
