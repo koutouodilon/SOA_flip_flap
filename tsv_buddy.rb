@@ -7,13 +7,15 @@ module TsvBuddy
   # parameter: tsv - a String in TSV format
   def take_tsv(tsv)
     @data = []
-    tsv_source = tsv.split(NEWLINE)
-    header = tsv_source[0].split(TAB)
-    tsv_source.each_with_index do |line, index|
-      next if index.zero?
-      @data.push(hash_tsv_line(line, header))
-    end
+    content, header = load_tsv(tsv)
+    content.each { |line| @data.push(hash_tsv_line(line, header)) }
     @data
+  end
+
+  def load_tsv(tsv)
+    content = tsv.split(NEWLINE)
+    header = content.first.split(TAB)
+    [content.drop(1), header]
   end
 
   def hash_tsv_line(line, header)
@@ -26,11 +28,15 @@ module TsvBuddy
   # returns: String in TSV format
   def to_tsv
     output = to_tsv_header << NEWLINE
-    @data.map { |line| output << line.values.join(TAB) << NEWLINE }
+    @data.each { |line| output << format_to_tsv(line) << NEWLINE }
     output
   end
 
+  def format_to_tsv(line)
+    line.values.join(TAB)
+  end
+
   def to_tsv_header
-    @data[0].keys.join(TAB)
+    @data.first.keys.join(TAB)
   end
 end
