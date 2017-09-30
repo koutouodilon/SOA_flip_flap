@@ -6,21 +6,20 @@ module TsvBuddy
   # take_tsv: converts a String with TSV data into @data
   # parameter: tsv - a String in TSV format
   def take_tsv(tsv)
-    @data = []
-    content, header = load_tsv(tsv)
-    content.each { |line| @data.push(hash_tsv_line(line, header)) }
+    data_rows, header = load_tsv(tsv)
+    @data = data_rows.map { |row| hash_tsv_line(row, header) }
     @data
   end
 
   def load_tsv(tsv)
-    content = tsv.split(NEWLINE)
-    header = content.first.split(TAB)
-    [content.drop(1), header]
+    rows = tsv.split(NEWLINE).map { |line| line.split(TAB) }
+    header = rows.first
+    [rows[1..-1], header]
   end
 
   def hash_tsv_line(line, header)
     row = {}
-    line.split(TAB).each_with_index { |col, id| row[header[id]] = col }
+    line.each_with_index { |col, id| row[header[id]] = col }
     row
   end
 
