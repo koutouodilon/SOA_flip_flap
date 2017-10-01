@@ -11,14 +11,12 @@ class FlipFlap
   attr_reader :data
 
   def self.input_formats
-    start = /^take_/
-    outputs = method_start_with(start)
+    outputs = method_start_with(/^take_/)
     outputs ? outputs.map { |method| method[5..-1] } : []
   end
 
   def self.method_start_with(start)
     method_names = instance_methods.map(&:to_s)
-    output = method_names.select { |method| method.match(start) }
-    output
+    method_names.select { |method| method.match(start) }
   end
 end
